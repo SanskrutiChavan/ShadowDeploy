@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: missing-env-app
+  labels:
+    app: missing-env-app
+    failure-type: missing-env
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: missing-env-app
+  template:
+    metadata:
+      labels:
+        app: missing-env-app
+        failure-type: missing-env
+    spec:
+      containers:
+      - name: app
+        image: missing-env-app:latest
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        # Notice: no env vars set → app will crash

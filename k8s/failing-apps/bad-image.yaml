@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: bad-image-app
+  labels:
+    app: bad-image-app
+    failure-type: image-pull-backoff
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: bad-image-app
+
+  template:
+    metadata:
+      labels:
+        app: bad-image-app
+        failure-type: image-pull-backoff
+
+    spec:
+      containers:
+      - name: app
+        image: this-image-does-not-exist-anywhere:v999
+
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "250m"

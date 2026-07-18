@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: oom-kill-app
+  labels:
+    app: oom-kill-app
+    failure-type: oom-killed
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: oom-kill-app
+
+  template:
+    metadata:
+      labels:
+        app: oom-kill-app
+        failure-type: oom-killed
+
+    spec:
+      containers:
+      - name: app
+        image: oom-kill-app:latest
+        imagePullPolicy: Never
+
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "250m"

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bad-port-app
+  labels:
+    app: bad-port-app
+    failure-type: failed-health-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bad-port-app
+  template:
+    metadata:
+      labels:
+        app: bad-port-app
+        failure-type: failed-health-check
+    spec:
+      containers:
+      - name: app
+        image: bad-port-app:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080        # wrong port — app is on 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"

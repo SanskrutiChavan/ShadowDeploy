@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: shadowdeploy-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: shadowdeploy-api
+
+  template:
+    metadata:
+      labels:
+        app: shadowdeploy-api
+
+    spec:
+      containers:
+        - name: shadowdeploy-api
+
+          image: shadowdeploy-api:1.0
+
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8000
